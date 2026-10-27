@@ -27,11 +27,6 @@ table{width:100%;border-collapse:collapse;font-size:.9rem}th,td{text-align:left;
 <body>
 <header><div class="wrap"><div class="eyebrow">Biologia • Ensino Médio • Aula investigativa</div><h1>Expedição Ciclos da Vida</h1><p>Água, carbono e nitrogênio: a matéria circula continuamente entre atmosfera, hidrosfera, solo e seres vivos. Explore cada etapa, teste suas ideias e resolva desafios ecológicos.</p></div></header>
 <main class="wrap">
-<div class="studentbox" id="identificacao">
-  <h3 style="margin-top:0">Antes de começar, identifique-se</h3>
-  <div class="two"><div><label class="field" for="nome">Nome e sobrenome</label><input id="nome" type="text" autocomplete="name" placeholder="Digite seu nome"></div><div><label class="field" for="turma">Turma</label><input id="turma" type="text" placeholder="Ex.: 2º B"></div></div>
-  <p class="small muted">Use seu nome escolar. As respostas serão enviadas ao painel do professor quando o sistema estiver publicado e conectado à planilha da turma.</p>
-</div>
 <div class="panel" style="margin:14px 0">
   <div style="display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap"><div><strong>Seu progresso</strong><div class="muted small" id="progressoTexto">0 de 4 etapas concluídas</div></div><div class="score"><span id="pontos">0</span> pts</div></div>
   <div class="progressbar" style="margin-top:10px"><span id="progressoBarra"></span></div>
@@ -43,9 +38,7 @@ table{width:100%;border-collapse:collapse;font-size:.9rem}th,td{text-align:left;
   <button data-go="carbono">🌿 Ciclo do carbono</button>
   <button data-go="nitrogenio">🦠 Ciclo do nitrogênio</button>
   <button data-go="avaliacao">🧠 Avaliação final</button>
-  <button data-go="envio">📨 Enviar respostas</button>
-  <hr style="border:0;border-top:1px solid var(--line);margin:12px 0">
-  <button data-go="professor">🔐 Painel do professor</button>
+
 </nav>
 <div>
 <section class="module active" id="inicio">
@@ -55,7 +48,7 @@ table{width:100%;border-collapse:collapse;font-size:.9rem}th,td{text-align:left;
 <h3>Ao final da expedição, você deverá conseguir:</h3>
 <ul><li>Explicar as etapas principais dos ciclos da água, do carbono e do nitrogênio.</li><li>Diferenciar processos como evaporação, fotossíntese, respiração, fixação e desnitrificação.</li><li>Relacionar os ciclos à dinâmica dos ecossistemas e às atividades humanas.</li><li>Interpretar diagramas e argumentar com base em evidências científicas.</li></ul>
 <div class="callout"><strong>Ideia central:</strong> a energia flui pelos ecossistemas, mas a matéria é reciclada. Os átomos que hoje estão em um organismo podem, futuramente, integrar o solo, a água, a atmosfera ou outro ser vivo.</div>
-<h3>Como estudar</h3><p>Leia cada etapa, observe o esquema, responda às perguntas de percurso e use o feedback para revisar os conceitos. Ao terminar, envie suas respostas para o professor.</p>
+<h3>Como estudar</h3><p>Leia cada etapa, observe o esquema, responda às perguntas de percurso e use o feedback para revisar os conceitos. Ao terminar, revise o feedback e veja quais conceitos você já domina.</p>
 <div class="actions"><button class="primary" onclick="go('agua')">Começar pelo ciclo da água →</button></div>
 </div></section>
 
@@ -128,21 +121,10 @@ table{width:100%;border-collapse:collapse;font-size:.9rem}th,td{text-align:left;
 <div class="actions"><button class="primary" onclick="complete('avaliacao');go('envio')">Terminar e preparar envio →</button></div>
 </div></section>
 
-<section class="module" id="envio"><div class="lesson"><div class="kicker">Fechamento</div><h2>Enviar respostas ao professor</h2><p>Confira seu nome e turma, revise as respostas abertas e envie seu registro. A correção automática contabiliza as questões objetivas respondidas corretamente.</p>
-<div class="panel"><div class="score"><span id="finalPontos">0</span> pontos</div><p id="resumoFinal" class="muted">Responda às questões e conclua as etapas para atualizar seu resumo.</p></div>
-<div class="callout warning"><strong>Atenção:</strong> o envio centralizado só funciona depois que a aplicação for publicada pelo Google Apps Script e a planilha de respostas estiver vinculada. Se a publicação ainda não foi configurada, o botão informará que não foi possível enviar.</div>
-<div class="actions"><button class="primary" id="sendBtn" onclick="enviar()">Enviar minhas respostas</button><button class="secondary" onclick="exportar()">Baixar cópia das minhas respostas (.json)</button></div><div id="sendStatus" class="status" role="status"></div>
-</div></section>
 
-<section class="module" id="professor"><div class="lesson"><div class="kicker">Área do professor</div><h2>Painel da turma</h2><p>O painel consulta a base central vinculada ao projeto. Para proteger os dados dos estudantes, o acesso deve ser restrito a quem tiver a chave de professor configurada no arquivo de código.</p>
-<div class="two"><div><label class="field" for="chaveProfessor">Chave de acesso do professor</label><input id="chaveProfessor" type="password" placeholder="Chave definida na configuração"></div><div style="display:flex;align-items:end"><button class="primary" onclick="carregarPainel()">Carregar resultados</button></div></div>
-<div id="painelStatus" class="status">O painel será conectado à planilha após a configuração e publicação.</div><div id="painelDados"></div>
-<p class="footer">Recomendação: use apenas dados necessários para a avaliação. Não solicite informações pessoais sensíveis. Oriente os estudantes sobre o registro e o uso pedagógico das respostas.</p>
-</div></section>
 </div></div>
 </main>
 <script>
-const API_CONFIG = { endpoint: '' }; // Cole aqui a URL do Aplicativo da Web do Apps Script após implantá-lo.
 let points=0, correctSet=new Set(), completed=new Set();
 const allModules=['agua','carbono','nitrogenio','avaliacao'];
 function go(id){document.querySelectorAll('section.module').forEach(s=>s.classList.toggle('active',s.id===id));document.querySelectorAll('nav button[data-go]').forEach(b=>b.classList.toggle('active',b.dataset.go===id));window.scrollTo({top:0,behavior:'smooth'});updateProgress();}
@@ -150,14 +132,6 @@ document.querySelectorAll('nav button[data-go]').forEach(b=>b.addEventListener('
 function check(group,answer,fb,good,bad){const picked=document.querySelector('input[name="'+group+'"]:checked');const el=document.getElementById(fb);if(!picked){el.textContent='Selecione uma alternativa antes de conferir.';el.className='feedback wrong';return}if(picked.value===answer){el.textContent=good;el.className='feedback correct';if(!correctSet.has(group)){correctSet.add(group);points+=10}}else{el.textContent=bad;el.className='feedback wrong'}updateProgress();}
 function complete(id){completed.add(id);updateProgress()}
 function updateProgress(){document.getElementById('pontos').textContent=points;document.getElementById('finalPontos').textContent=points;const n=completed.size;document.getElementById('progressoTexto').textContent=n+' de 4 etapas concluídas';document.getElementById('progressoBarra').style.width=(n/4*100)+'%';document.getElementById('resumoFinal').textContent='Etapas concluídas: '+n+'/4. Questões objetivas corretas: '+correctSet.size+'. Pontuação atual: '+points+' pontos.'}
-function getData(){const answers={};document.querySelectorAll('input[type=radio]:checked').forEach(x=>answers[x.name]=x.value);return {nome:document.getElementById('nome').value.trim(),turma:document.getElementById('turma').value.trim(),pontuacao:points,questoesCorretas:correctSet.size,etapasConcluidas:Array.from(completed),respostasObjetivas:answers,respostasAbertas:{agua:val('disagua'),carbono:val('discarb'),nitrogenio:val('disnitro'),avaliacao:val('abertaFinal')},enviadoEm:new Date().toISOString(),versao:'Expedição Ciclos da Vida 1.0'}}
-function val(id){const e=document.getElementById(id);return e?e.value.trim():''}
-function exportar(){const d=getData();const blob=new Blob([JSON.stringify(d,null,2)],{type:'application/json'});const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='respostas_'+(d.nome||'estudante').replace(/[^a-z0-9_-]/gi,'_')+'.json';a.click();URL.revokeObjectURL(a.href)}
-async function enviar(){const d=getData();const status=document.getElementById('sendStatus');if(!d.nome||!d.turma){status.textContent='Preencha seu nome e sua turma antes de enviar.';return}if(!API_CONFIG.endpoint){status.textContent='O envio ainda não foi configurado. O professor precisa colar a URL do Apps Script na configuração da aula.';return}const btn=document.getElementById('sendBtn');btn.disabled=true;status.textContent='Enviando respostas…';try{const body=new URLSearchParams({acao:'salvar',dados:JSON.stringify(d)});await fetch(API_CONFIG.endpoint,{method:'POST',mode:'no-cors',body});status.textContent='Envio realizado. O navegador não permite confirmar a gravação; consulte o professor se precisar verificar o recebimento.'}catch(e){status.textContent='Não foi possível enviar. Confira a conexão e tente novamente.'}finally{btn.disabled=false}}
-async function carregarPainel(){const status=document.getElementById('painelStatus'),out=document.getElementById('painelDados'),key=val('chaveProfessor');if(!key){status.textContent='Digite a chave de acesso do professor.';return}if(!API_CONFIG.endpoint){status.textContent='O painel ainda não está conectado. Configure a URL do Apps Script.';return}status.textContent='A consulta direta ao painel não foi ativada nesta versão do GitHub Pages. Use a planilha Google para consultar as respostas.';out.innerHTML=''}
-function renderTable(rows){if(!rows.length)return '<p>Nenhuma resposta registrada até o momento.</p>';let h='<div style="overflow:auto;margin-top:14px"><table><thead><tr><th>Data</th><th>Estudante</th><th>Turma</th><th>Pontos</th><th>Respostas abertas</th></tr></thead><tbody>';rows.forEach(r=>{h+='<tr><td>'+esc(r.data)+'</td><td>'+esc(r.nome)+'</td><td>'+esc(r.turma)+'</td><td>'+esc(r.pontuacao)+'</td><td><details><summary>Ver respostas</summary><pre style="white-space:pre-wrap">'+esc(r.abertas)+'</pre></details></td></tr>'});return h+'</tbody></table></div>'}
-function esc(s){return String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
-updateProgress();
 </script>
 </body>
 </html>
